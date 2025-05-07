@@ -1,0 +1,19 @@
+# Ignore Python cache files
+__pycache__/
+*.pyc
+*.pyo
+
+# Ignore virtual environment directories
+venv/
+env/
+
+# Ignore IDE-specific files
+.vscode/
+*.code-workspace
+
+# Ignore resource files if they vary between environments
+resources/Dautomate.png
+
+# Ignore other temporary or log files
+*.log
+*.tmp
