@@ -7,10 +7,15 @@ if __name__ == "__main__":
     app.title("Dautomate")
     app.geometry("600x400")
 
-    # Load application icon
-    icon_img = Image.open("resources/Dautomate.png")
-    icon_photo = ImageTk.PhotoImage(icon_img)
-    app.iconphoto(False, icon_photo)
+    # Load application icon for window and taskbar
+    try:
+        app.iconbitmap("resources/Dautomate.ico")  # Use .ico for taskbar icon
+    except Exception as e:
+        print("ICO icon not found or failed to load:", e)
+        # Fallback to PNG for window icon
+        icon_img = Image.open("resources/Dautomate.jpg")
+        icon_photo = ImageTk.PhotoImage(icon_img)
+        app.iconphoto(False, icon_photo)
 
     # Initialize and pack the main frame
     main_frame = MainWindow(app)

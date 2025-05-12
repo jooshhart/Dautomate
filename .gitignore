@@ -11,9 +11,6 @@ env/
 .vscode/
 *.code-workspace
 
-# Ignore resource files if they vary between environments
-resources/Dautomate.png
-
 # Ignore other temporary or log files
 *.log
 *.tmp
