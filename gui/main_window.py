@@ -1,11 +1,13 @@
 import tkinter as tk
 from gui.pages.start_page import StartPage
 from gui.pages.data_page import DataPage
+from core.data_processor import DataProcessor
 
 class MainWindow(tk.Frame):
     def __init__(self, parent):
         super().__init__(parent)
         self.parent = parent
+        self.data_processor = DataProcessor()
 
         # Container for all pages
         container = tk.Frame(self)
@@ -30,3 +32,18 @@ class MainWindow(tk.Frame):
         """Raise the frame with the given page_name."""
         frame = self.frames[page_name]
         frame.tkraise()
+
+    def process_data(self, dtype, filename):
+        self.data_processor.load_file(filename)
+        if dtype == "curve":
+            self.data_processor.process_data()  # Replace with your curve logic
+        elif dtype == "stats":
+            # Add stats logic
+            pass
+        elif dtype == "clean":
+            # Add cleaning logic
+            pass
+        elif dtype == "viz":
+            # Add visualization logic
+            pass
+        # Optionally, navigate to DataPage or show results
