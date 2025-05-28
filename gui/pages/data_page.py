@@ -1,34 +1,26 @@
 import tkinter as tk
-from tkinter import filedialog, messagebox
-from core.data_processor import DataProcessor
+from tkinter import ttk
 
 class DataPage(tk.Frame):
     def __init__(self, parent, controller):
-        super().__init__(parent)
+        super().__init__(parent, bg="#f5f5f5")
         self.controller = controller
-        self.processor = DataProcessor()
 
-        tk.Button(self, text="Upload Excel", command=self.load_excel).pack(pady=10)
-        tk.Button(self, text="Process & Export", command=self.process_excel).pack(pady=10)
-        tk.Button(
-            self,
-            text="← Back to Start",
-            command=lambda: controller.show_frame("StartPage")
-        ).pack(pady=20)
+        self.label = tk.Label(self, text="Processed Data", font=("Helvetica", 18, "bold"), bg="#f5f5f5")
+        self.label.pack(pady=10)
 
-    def load_excel(self):
-        file_path = filedialog.askopenfilename(filetypes=[("Excel files", "*.xlsx *.xls")])
-        if file_path:
-            self.processor.load_file(file_path)
-            messagebox.showinfo("File Loaded", "Excel file loaded successfully.")
+        self.tree = ttk.Treeview(self)
+        self.tree.pack(expand=True, fill="both", padx=20, pady=20)
 
-    def process_excel(self):
-        if self.processor.df is None:
-            messagebox.showwarning("No Data", "Please upload an Excel file first.")
-            return
-
-        self.processor.process_data()
-        output_path = filedialog.asksaveasfilename(defaultextension=".xlsx")
-        if output_path:
-            self.processor.save_file(output_path)
-            messagebox.showinfo("Success", "File processed and saved successfully.")
+    def show_dataframe(self, df):
+        # Clear previous content
+        for col in self.tree.get_children():
+            self.tree.delete(col)
+        self.tree.delete(*self.tree.get_children())
+        self.tree["columns"] = list(df.columns)
+        self.tree["show"] = "headings"
+        for col in df.columns:
+            self.tree.heading(col, text=col)
+            self.tree.column(col, width=100)
+        for _, row in df.iterrows():
+            self.tree.insert("", "end", values=list(row))

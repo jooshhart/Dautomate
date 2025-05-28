@@ -87,7 +87,7 @@ class StartPage(tk.Frame):
 
         # Example processing types (add more as needed)
         types = [
-            ("Curve Fitting", "curve"),
+            ("Testing", "test"),
             ("Statistical Analysis", "stats"),
             ("Data Cleaning", "clean"),
             ("Visualization", "viz"),

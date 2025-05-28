@@ -35,8 +35,8 @@ class MainWindow(tk.Frame):
 
     def process_data(self, dtype, filename):
         self.data_processor.load_file(filename)
-        if dtype == "curve":
-            self.data_processor.process_data()  # Replace with your curve logic
+        if dtype == "test":
+            self.data_processor.test()  # Replace with your curve logic
         elif dtype == "stats":
             # Add stats logic
             pass
@@ -46,4 +46,8 @@ class MainWindow(tk.Frame):
         elif dtype == "viz":
             # Add visualization logic
             pass
+        df = self.data_processor.df
+        data_page = self.frames["DataPage"]
+        data_page.show_dataframe(df)
+        self.show_frame("DataPage")
         # Optionally, navigate to DataPage or show results

@@ -7,7 +7,7 @@ class DataProcessor:
     def load_file(self, path):
         self.df = pd.read_excel(path)
 
-    def process_data(self):
+    def test(self):
         if self.df is not None:
             # Example logic: double the first column if it's numeric
             try:
