@@ -1,3 +1,4 @@
+from utils import resource_path
 import tkinter as tk
 from tkinter import filedialog, ttk
 from PIL import Image, ImageTk, ImageSequence
@@ -8,7 +9,7 @@ class StartPage(tk.Frame):
         super().__init__(parent, bg="#f5f5f5")
         self.controller = controller
 
-        self.gif_path = os.path.join("resources", "DA.gif")
+        self.gif_path = resource_path(os.path.join("resources", "DA.gif"))
         self.video_frame = tk.Frame(self, bg="#f5f5f5")
         self.video_frame.pack(expand=True, fill="both")
 
