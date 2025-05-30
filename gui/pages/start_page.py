@@ -1,4 +1,5 @@
 from utils import resource_path
+import winsound
 import tkinter as tk
 from tkinter import filedialog, ttk
 from PIL import Image, ImageTk, ImageSequence
@@ -20,6 +21,7 @@ class StartPage(tk.Frame):
         self.gif_label.pack(expand=True)
         self.current_frame = 0
         self.after_id = None
+        winsound.PlaySound(resource_path(os.path.join("resources", "QuickIntro.wav")), winsound.SND_FILENAME | winsound.SND_ASYNC)
         self.play_gif()
 
     def play_gif(self):
