@@ -6,7 +6,11 @@ from PIL import Image, ImageTk
 if __name__ == "__main__":
     app = tk.Tk()
     app.title("Dautomate")
-    app.geometry("600x400")
+    app.resizable(True, True)
+    # Set window size to full screen
+    screen_width = app.winfo_screenwidth()
+    screen_height = app.winfo_screenheight()
+    app.geometry(f"{screen_width}x{screen_height}")
 
     # Load application icon for window and taskbar
     try:
