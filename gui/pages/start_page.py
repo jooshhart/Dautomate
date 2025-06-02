@@ -1,3 +1,4 @@
+from gui.widgets.scrollable_frame import ScrollableFrame
 from utils import resource_path
 import winsound
 import tkinter as tk
@@ -5,20 +6,25 @@ from tkinter import filedialog, ttk
 from PIL import Image, ImageTk, ImageSequence
 import os
 
-class StartPage(tk.Frame):
+class StartPage(ScrollableFrame):
     def __init__(self, parent, controller):
         super().__init__(parent, bg="#f5f5f5")
         self.controller = controller
 
+        # Use self.scrollable_frame for all widgets
+        self.prompt_frame = tk.Frame(self.scrollable_frame, bg="#f5f5f5")
+        self.prompt_frame.pack(pady=(10, 0))
+
         self.gif_path = resource_path(os.path.join("resources", "DA.gif"))
-        self.video_frame = tk.Frame(self, bg="#f5f5f5")
-        self.video_frame.pack(expand=True, fill="both")
+        self.video_frame = tk.Frame(self.scrollable_frame, bg="#f5f5f5", height=600)  # or 844 for full phone height
+        self.video_frame.pack(fill="x", pady=20)
+        self.video_frame.pack_propagate(False)
 
         # Load and play GIF
         self.gif = Image.open(self.gif_path)
         self.gif_frames = [ImageTk.PhotoImage(frame.copy().convert("RGBA")) for frame in ImageSequence.Iterator(self.gif)]
         self.gif_label = tk.Label(self.video_frame, bg="#f5f5f5")
-        self.gif_label.pack(expand=True)
+        self.gif_label.place(relx=0.5, rely=0.5, anchor="center")
         self.current_frame = 0
         self.after_id = None
         winsound.PlaySound(resource_path(os.path.join("resources", "QuickIntro.wav")), winsound.SND_FILENAME | winsound.SND_ASYNC)
@@ -62,7 +68,7 @@ class StartPage(tk.Frame):
 
         # Title
         title = tk.Label(
-            self,
+            self.scrollable_frame,
             text="Welcome to Dautomate",
             font=("Helvetica", 24, "bold"),
             bg="#f5f5f5",
@@ -71,12 +77,12 @@ class StartPage(tk.Frame):
         title.pack(pady=(20, 5))
 
         # Separator
-        sep = ttk.Separator(self, orient="horizontal")
+        sep = ttk.Separator(self.scrollable_frame, orient="horizontal")
         sep.pack(fill="x", padx=40, pady=10)
 
         # Prompt
         prompt = tk.Label(
-            self,
+            self.scrollable_frame,
             text="How would you like to process your data?",
             font=("Helvetica", 14),
             bg="#f5f5f5",
@@ -85,13 +91,13 @@ class StartPage(tk.Frame):
         prompt.pack(pady=(0, 20))
 
         # Hub-style menu frame
-        hub_frame = tk.Frame(self, bg="#e0e0e0", bd=3, relief="ridge")
+        hub_frame = tk.Frame(self.scrollable_frame, bg="#e0e0e0", bd=3, relief="ridge")
         hub_frame.pack(pady=20, padx=60)
 
         # Example processing types (add more as needed)
         types = [
             ("Testing", "test"),
-            ("Statistical Analysis", "stats"),
+            ("Efficiency", "eff"),
             ("Data Cleaning", "clean"),
             ("Visualization", "viz"),
         ]
@@ -120,7 +126,7 @@ class StartPage(tk.Frame):
         hub_frame.grid_columnconfigure(1, weight=1)
 
     def select_file(self, dtype):
-        filetypes = [("Excel Files", "*.xlsx;*.xls"), ("All Files", "*.*")]
+        filetypes = [("CSV Files", "*.csv"), ("All Files", "*.*")]
         filename = filedialog.askopenfilename(
             title="Select data file",
             filetypes=filetypes

@@ -2,6 +2,7 @@ import tkinter as tk
 from gui.pages.start_page import StartPage
 from gui.pages.data_page import DataPage
 from core.data_processor import DataProcessor
+from gui.pages.column_selector_page import ColumnSelectorPage
 
 class MainWindow(tk.Frame):
     def __init__(self, parent):
@@ -19,7 +20,7 @@ class MainWindow(tk.Frame):
 
         # Dictionary to hold references to page frames
         self.frames = {}
-        for Page in (StartPage, DataPage):
+        for Page in (StartPage, DataPage, ColumnSelectorPage):
             page_name = Page.__name__
             frame = Page(container, self)
             self.frames[page_name] = frame
@@ -37,17 +38,17 @@ class MainWindow(tk.Frame):
         self.data_processor.load_file(filename)
         if dtype == "test":
             self.data_processor.test()  # Replace with your curve logic
-        elif dtype == "stats":
-            # Add stats logic
-            pass
-        elif dtype == "clean":
-            # Add cleaning logic
-            pass
-        elif dtype == "viz":
-            # Add visualization logic
-            pass
+        elif dtype == "eff":
+            columns = list(self.data_processor.df.columns)
+            selector_page = self.frames["ColumnSelectorPage"]
+            selector_page.set_columns(columns)
+            self.show_frame("ColumnSelectorPage")
+
+    def process_efficiency_with_columns(self, col_map):
+        self.data_processor.col_map = col_map
+        self.data_processor.process_efficiency()
+        # Show DataPage with processed data
         df = self.data_processor.df
         data_page = self.frames["DataPage"]
-        data_page.show_dataframe(df)
+        data_page.show_dataframe(df, col_map)
         self.show_frame("DataPage")
-        # Optionally, navigate to DataPage or show results
