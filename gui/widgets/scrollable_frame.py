@@ -38,14 +38,31 @@ class ScrollableFrame(tk.Frame):
         canvas.pack(side="left", fill="both", expand=True)
         v_scrollbar.pack(side="right", fill="y")
 
+        # Improved mousewheel binding
         self._bind_mousewheel(canvas)
 
     def _bind_mousewheel(self, canvas):
+        # Windows and MacOS
         def _on_mousewheel(event):
-            canvas.yview_scroll(int(-1*(event.delta/120)), "units")
+            if event.delta:
+                canvas.yview_scroll(int(-1*(event.delta/120)), "units")
+            elif event.num == 4:  # Linux scroll up
+                canvas.yview_scroll(-1, "units")
+            elif event.num == 5:  # Linux scroll down
+                canvas.yview_scroll(1, "units")
+
         def bind_to_children(widget):
-            widget.bind("<Enter>", lambda e: canvas.bind_all("<MouseWheel>", _on_mousewheel))
-            widget.bind("<Leave>", lambda e: canvas.unbind_all("<MouseWheel>"))
+            widget.bind("<Enter>", lambda e: widget.focus_set())
+            widget.bind("<Leave>", lambda e: canvas.focus_set())
+            # Bind mousewheel events for Windows/Mac
+            widget.bind("<MouseWheel>", _on_mousewheel)
+            # Bind mousewheel events for Linux
+            widget.bind("<Button-4>", _on_mousewheel)
+            widget.bind("<Button-5>", _on_mousewheel)
             for child in widget.winfo_children():
                 bind_to_children(child)
         bind_to_children(self.scrollable_frame)
+        # Also bind to the canvas itself
+        canvas.bind("<MouseWheel>", _on_mousewheel)
+        canvas.bind("<Button-4>", _on_mousewheel)
+        canvas.bind("<Button-5>", _on_mousewheel)
